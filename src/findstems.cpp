@@ -14,7 +14,7 @@ int main(int argc, char **argv)
 	std::stringstream ss;
 	//
 	std::cout << "Reading slice: " << std::flush;
-	std::vector<std::string> id = getFileID(args[4]);
+	std::vector<std::string> id = getFileID(args[5]);
 	pcl::PointCloud<PointTreeseg>::Ptr slice(new pcl::PointCloud<PointTreeseg>);
 	reader.read(args[4],*slice);
 	std::cout << "complete" << std::endl;
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 	float dmin = std::stof(args[1]);
 	float dmax = std::stof(args[2]);
 	std::ifstream coordfile;
-	coordfile.open(args[3]);
+	coordfile.open(args[4]);
 	float coords[4];
 	int n = 0;
 	if(coordfile.is_open())
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 	float xmax = coords[1];
 	float ymin = coords[2];
 	float ymax = coords[3];
-	float lmin = 2.25; //assuming 3m slice
+	float lmin = std::stof(args[3]); //2.25; //assuming 3m slice
 	float stepcovmax = 0.2;
 	float radratiomin = 0.8;
 	for(int i=0;i<regions.size();i++)
@@ -80,8 +80,8 @@ int main(int argc, char **argv)
 		{		
 			if(cyl.rad*2 >= dmin && cyl.rad*2 <= dmax && cyl.len >= lmin)
 			{
-				if(cyl.stepcov <= stepcovmax && cyl.radratio > radratiomin)
-				{
+			//	if(cyl.stepcov <= stepcovmax && cyl.radratio > radratiomin)
+			//	{
 					if(cyl.x >= xmin && cyl.x <= xmax)
 					{
 						if(cyl.y >= ymin && cyl.y <= ymax)
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 							cyls.push_back(cyl.inliers);
 						}
 					}
-				}
+				//}
 			}
 		}
 	}
